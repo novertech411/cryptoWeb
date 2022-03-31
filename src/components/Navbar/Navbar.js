@@ -1,70 +1,71 @@
-import React from "react";
-import { FaTime } from "react-icons/fa";
-import { CgMenuRight } from "react-icons/cg";
+import React, { useState } from 'react';
+import { FaRProject, FaTimes } from 'react-icons/fa';
+import { CgMenuRight } from 'react-icons/cg';
+import { IconContext } from 'react-icons';
 import {
-  Nav,
-  NavbarContainer,
-  NavLogo,
-  NavIcon,
-  MobileIcon,
-  NavMenu,
-  NavLink,
-  NavItem,
-} from "./Nav";
-import { useLocation, useHistory } from "react-router-dom";
-import { data } from "../../data/NavbarData";
-import { IconContext } from "react-icons/lib";
+	Nav,
+	NavbarContainer,
+	NavLogo,
+	NavIcon,
+	MobileIcon,
+	NavMenu,
+	NavLinks,
+	NavItem,
+} from './NavberStyles';
+import { useLocation, useHistory } from 'react-router-dom';
+import { data } from '../../data/NavbarData';
 
 const Navbar = () => {
+	const [show, setShow] = useState(false);
 
-const [show, setShow] = useState(false);
+	let history = useHistory();
+	let location = useLocation();
 
+	const handleClick = () => {
+		setShow(!show);
+	};
 
-let history = useHistory();
-let location = useLocation();
+	const scrollTo = (id) => {
+		const element = document.getElementById(id);
 
-const handleClick = () => {
-    setShow(!show);
-};
+		element.scrollIntoView({
+			behavior: 'smooth',
+		});
+	};
 
-const scrollTo = (id) => {
-    const element = document.getElementById(id);
-    element.scrollIntoView({
-        behavior:'smooth',
-    })
-}
+	const closeMobileMenu = (to, id) => {
+		if (id && location.pathname === '/') {
+			scrollTo(id);
+		}
 
-const closeMobileMenu = (to,id) => {
-    if (id && location.pathname === '/'){
-        scrollTo(id);
-    }
+		history.push(to);
+		setShow(false);
+	};
 
-    history.puch(to);
-    setShow(false)
-}
-
-
-  return (
-    <IconContext.Provider value={{color:"#fff"}} >
-      <Nav>
-        <NavbarContainer>
-          <NavLogo to='/'>
-            <navIcon src="./assets/logo.png" alt="logo">
-              Delta
-            </navIcon>
-            <MobileIcon onclick={handleClick} >{show ? <FaTime /> : <CgMenuRight />}</MobileIcon>
-            <NavMenu  show={show}>
-              {data.map((el, index) => (
-                <NavItem key={index}>
-                  <NavLinks onClick={() => closeMobileMenu(el.to, el.id)} >{el.text}</NavLinks>
-                </NavItem>
-              ))}
-            </NavMenu>
-          </NavLogo>
-        </NavbarContainer>
-      </Nav>
-    </IconContext.Provider>
-  );
+	return (
+		<IconContext.Provider value={{ color: '#fff' }}>
+			<Nav>
+				<NavbarContainer>
+					<NavLogo to="/">
+						<NavIcon src="./assets/logo.png" alt="logo" />
+						Delta
+					</NavLogo>
+					{ <MobileIcon onClick={handleClick}>
+						{show ? <FaTimes /> : <CgMenuRight />}
+					</MobileIcon> }
+					<NavMenu show={show}>
+						{data.map((el, index) => (
+							<NavItem key={index}>
+								<NavLinks onClick={() => closeMobileMenu(el.to, el.id)}>
+									{el.text}
+								</NavLinks>
+							</NavItem>
+						))}
+					</NavMenu>
+				</NavbarContainer>
+			</Nav>
+		</IconContext.Provider>
+	);
 };
 
 export default Navbar;
