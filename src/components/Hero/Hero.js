@@ -9,6 +9,17 @@ import {
   HeroButton,
 } from "./HeroStyles";
 
+import { featuresDate } from '../../data/FeaturesData';
+
+
+const Features = () => {
+  const initial = {
+    y: 40,
+    opacity: 0,
+  };
+}
+
+
 const hero = () => {
   return (
     <div>
